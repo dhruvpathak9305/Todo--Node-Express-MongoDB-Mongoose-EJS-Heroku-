@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Todo List</title>
+  </head>
+  <body>
+    <h1><%= kindOfDay %> ToDo List</h1>
+    <ul>
+      <!-- Enclose Js in <%  %> tag -->
+      <% newListItems.forEach(item=>{ %>
+      <!-- To access the value <%= %> -->
+      <li><%= item %></li>
+      <% }) %>
+    </ul>
+    <form action="/" method="post">
+      <input type="text" name="newItem" />
+      <button type="submit" name="buttom">Add</button>
+    </form>
+  </body>
+</html>
