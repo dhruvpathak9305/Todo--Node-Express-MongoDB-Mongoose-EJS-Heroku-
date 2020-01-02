@@ -1,7 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
-var items=["Item 1","Item 2","Item 3"];
+var items = ["Item 1", "Item 2", "Item 3"];
+var workItems = [];
 
 app.set("view engine", "ejs");
 
@@ -16,16 +17,36 @@ app.get("/", function(req, res) {
     month: "long"
   };
   var day = today.toLocaleDateString("en-US", options);
-  res.render("list", { kindOfDay: day , newListItems: items});
+  res.render("list", { listTitle: day, newListItems: items });
 });
 
 app.post("/", function(req, res) {
-  var item = req.body.newItem;
+  console.log(req.body);
+  let item = req.body.newItem;
+if(req.body.list==="Work"){
+  workItems.push(item);
+  res.redirect("/work");
+}else{
   items.push(item);
-  //If this is done then first render will pass only one parameter which will crash the app. 
-  // res.render("list", { newListItem: item });
   res.redirect("/");
+}
+ 
+});
+
+app.get("/work", function(req, res) {
+  res.render("list", { listTitle: "Work List", newListItems: workItems });
+});
+
+app.post("/work", function(req, res) {
+  let item = req.body.newItem;
+  workItems.push(item);
+ 
+  res.redirect("/work");
   console.log(item);
+});
+
+app.get("/about", function(req, res) {
+  res.render("about");
 });
 
 app.listen(3000, function() {

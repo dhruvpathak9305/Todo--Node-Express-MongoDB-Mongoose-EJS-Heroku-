@@ -1,15 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Todo List</title>
-    <link rel="stylesheet" href="css/styles.css" />
-  </head>
-  <body>
-    <div class="box" id="heading">
-      <h1><%= kindOfDay %> ToDo List</h1>
+ <%- include("header") -%>
+ <div class="box" id="heading">
+      <h1><%= listTitle %></h1>
     </div>
     <div class="box">
       <!-- Enclose Js in <%  %> tag -->
@@ -22,8 +13,7 @@
       <% }) %>
       <form class="item" action="/" method="post">
         <input type="text" name="newItem" placeholder="New Item" autocomplete="off"/>
-        <button type="submit" name="buttom">+</button>
+        <button type="submit" name="list" value=<%= listTitle %> >+</button>
       </form>
     </div>
-  </body>
-</html>
+    <%- include("footer") -%>
