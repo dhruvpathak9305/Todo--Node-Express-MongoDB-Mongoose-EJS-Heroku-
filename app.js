@@ -6,7 +6,7 @@ var items=["Item 1","Item 2","Item 3"];
 app.set("view engine", "ejs");
 
 app.use(bodyParser.urlencoded({ extended: true }));
-
+app.use(express.static("public"));
 app.get("/", function(req, res) {
   var today = new Date();
 
