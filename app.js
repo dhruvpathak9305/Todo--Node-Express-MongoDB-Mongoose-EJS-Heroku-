@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const _=require("lodash");
 
 const app = express();
 const items = ["Item 1", "Item 2", "Item 3"];
@@ -10,7 +11,7 @@ app.set("view engine", "ejs");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
-mongoose.connect("mongodb://localhost:27017/todolistDB", {
+mongoose.connect("mongodb+srv://admin-dhruv:Test123@cluster0-6yvl3.mongodb.net/todolistDB", {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
@@ -61,7 +62,7 @@ app.get("/", function(req, res) {
 });
 
 app.get("/:customListName",function(req,res){
-  const customListName = req.params.customListName;
+  const customListName = _.capitalize(req.params.customListName);
   List.findOne({name:customListName},function(err,foundList){
     if(!err){
       if(!foundList){
@@ -102,14 +103,24 @@ if(listName==='Today'){
 });
 
 app.post("/delete", function(req, res) {
-  console.log(req.body);
+ 
   const checkedItemId= req.body.checkbox;
-Item.findByIdAndRemove(checkedItemId,function(err){
-  if(!err){
-    console.log("Successfully deleted checked Items.")
-    res.redirect("/");
+  const listName= req.body.listName;
+  if(listName==="Today"){
+    Item.findByIdAndRemove(checkedItemId,function(err){
+      if(!err){
+        console.log("Successfully deleted checked Items.")
+        res.redirect("/");
+      }
+    });
+  }  else{
+    List.findOneAndUpdate({name:listName},{$pull:{items:{_id:checkedItemId}}},function(err,foundList){
+      if(!err){
+        res.redirect("/"+listName);
+      }
+    })
   }
-});
+
 });
 
 app.get("/work", function(req, res) {
@@ -128,6 +139,11 @@ app.get("/about", function(req, res) {
   res.render("about");
 });
 
-app.listen(3000, function() {
-  console.log("Server started on port 3000");
+let port =process.env.PORT;
+if(port==null ||port==""){
+  port=3000;
+}
+
+app.listen(port, function() {
+  console.log("Server started successfully");
 });
